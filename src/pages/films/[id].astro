@@ -4,6 +4,7 @@ import Layout from "../../layouts/Layout.astro";
 import { formatDate } from "../../helpers";
 import { getEntry } from "astro:content";
 import { getEntries } from "astro:content";
+import LinkPersonne from "../../components/LinkPersonne.astro";
 // 1. Génére un nouveau chemin pour chaque entrée de collection
 export async function getStaticPaths() {
   const film = await getCollection("films");
@@ -30,8 +31,8 @@ film.data.roles && await Promise.all(film.data.roles.map(async(r)=> ({role: r.ro
 <Layout pageTitle={`Fiche de ${film.data.titre}`} >
 <h1 class="text-2xl text-purple-600" >{film.data.titre}</h1>
 <p>Date de sortie : {formatDate(film.data.dateSortie)}</p>
-{realisateur && <p>Réalisateur : {realisateur.data.nom}</p>}
-{scenaristes && <p>Scénaristes {scenaristes.length > 1 && <>s</>}: {scenaristes .map((s) =>s.data.nom) .join(", ") .replace(/, ([^,]*)$/," et $1")}</p>}
+{realisateur && <p>Réalisateur <LinkPersonne personne ={realisateur}/></p>}
+{scenaristes && <p>Scénaristes {scenaristes.length > 1 && <>s</>} {scenaristes .map((s) => <LinkPersonne personne={s}/>) .join(", ") .replace(/, ([^,]*)$/," et $1")}</p>}
 
 {
   roles &&(
